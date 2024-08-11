@@ -51,9 +51,9 @@
             <h2>Novo Digimon</h2>
             <form action="/create" method="POST">
                 <label for="name">Nome:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" minlength="4" maxlength="20" autocomplete="off" required>
                 <label for="type">Tipo:</label>
-                <input type="text" id="type" name="type" required>
+                <input type="text" id="type" name="type" minlength="4" maxlength="15" autocomplete="off" required>
                 <button type="submit" class="button">Criar</button>
             </form>
         </div>
@@ -66,9 +66,9 @@
             <h2>Atualizar Digimon</h2>
             <form id="update-form" method="POST">
                 <label for="update-name">Nome:</label>
-                <input type="text" id="update-name" name="name" required>
+                <input type="text" id="update-name" name="name" minlength="4" maxlength="20" autocomplete="off" required>
                 <label for="update-type">Tipo:</label>
-                <input type="text" id="update-type" name="type" required>
+                <input type="text" id="update-type" name="type" minlength="4" maxlength="15" autocomplete="off" required>
                 <button type="submit" class="button">Atualizar</button>
             </form>
         </div>

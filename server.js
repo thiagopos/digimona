@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const digimonModel = require('./digimonModel');
+const validateDigimon = require('./ajvSchemas');
 
 const app = express();
 
@@ -31,11 +32,20 @@ app.get('/', (req, res) => {
 
 // Rota para criar um novo Digimon
 app.post('/create', (req, res) => {
-    const { name, type } = req.body; // Desestruturação dos dados do formulário
+    const { name, type } = req.body;
+
+    // Valida os dados antes de criar o Digimon
+    const isValid = validateDigimon({ nome: name, tipo: type });
+
+    if (!isValid) {
+        // Se a validação falhar, retorna uma mensagem de erro com status 400
+        return res.status(400).json({ errors: validateDigimon.errors });
+    }
+
     // Chama o modelo para criar um novo Digimon com os dados fornecidos
     digimonModel.createDigimon(name, type, (err) => {
         if (err) {
-            // Em caso de erro ao criar o Digimon, retorna uma mensagem de falha com status 500.
+            // Em caso de erro ao criar o Digimon, retorna uma mensagem de falha com status 500
             return res.status(500).send('Falha ao criar Digimon');
         }
         // Redireciona para a página principal após a criação do Digimon
@@ -43,20 +53,31 @@ app.post('/create', (req, res) => {
     });
 });
 
+
 // Rota para atualizar um Digimon existente
 app.post('/update/:id', (req, res) => {
-    const { id } = req.params; // Obtém o ID do Digimon a partir dos parâmetros da URL
-    const { name, type } = req.body; // Obtém os dados do formulário para atualizar o Digimon
+    const { id } = req.params;
+    const { name, type } = req.body;
+
+    // Valida os dados antes de atualizar o Digimon
+    const isValid = validateDigimon({ nome: name, tipo: type });
+
+    if (!isValid) {
+        // Se a validação falhar, retorna uma mensagem de erro com status 400
+        return res.status(400).json({ errors: validateDigimon.errors });
+    }
+
     // Chama o modelo para atualizar o Digimon com o ID e novos dados fornecidos
     digimonModel.updateDigimon(id, name, type, (err) => {
         if (err) {
-            // Em caso de erro ao atualizar o Digimon, retorna uma mensagem de falha com status 500.
+            // Em caso de erro ao atualizar o Digimon, retorna uma mensagem de falha com status 500
             return res.status(500).send('Falha ao atualizar Digimon');
         }
         // Redireciona para a página principal após a atualização do Digimon
         res.redirect('/');
     });
 });
+
 
 // Rota para deletar um Digimon
 app.post('/delete/:id', (req, res) => {
