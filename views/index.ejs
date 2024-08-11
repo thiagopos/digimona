@@ -1,0 +1,79 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Digimons</h1>
+
+        <button id="new-digimon-btn" class="button">Novo</button>
+
+        <!-- Tabela de Digimons -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% digimons.forEach(digimon => { %>
+                    <tr>
+                        <td><%= digimon.name %></td>
+                        <td><%= digimon.type %></td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="dots-btn">...</button>
+                                <div class="dropdown-content">
+                                    <button class="update-btn" data-id="<%= digimon.id %>" data-name="<%= digimon.name %>" data-type="<%= digimon.type %>">Atualizar</button>
+                                    <form action="/delete/<%= digimon.id %>" method="POST">
+                                        <button type="submit" onclick="return confirm('Tem certeza que deseja deletar este Digimon?')">Deletar</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal para Novo Digimon -->
+    <div id="new-digimon-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Novo Digimon</h2>
+            <form action="/create" method="POST">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="type">Tipo:</label>
+                <input type="text" id="type" name="type" required>
+                <button type="submit" class="button">Criar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Atualizar Digimon -->
+    <div id="update-digimon-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Atualizar Digimon</h2>
+            <form id="update-form" method="POST">
+                <label for="update-name">Nome:</label>
+                <input type="text" id="update-name" name="name" required>
+                <label for="update-type">Tipo:</label>
+                <input type="text" id="update-type" name="type" required>
+                <button type="submit" class="button">Atualizar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/scripts.js"></script>
+</body>
+</html>
